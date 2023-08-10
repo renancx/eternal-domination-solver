@@ -11,6 +11,10 @@ public:
     //build a simple graph that has the number of vertices received by parameter and that has no edges
     Graph(int num_vertices);
 
+    //build a graph from a file that has the following format:
+    //p edge <number of vertices> <number of edges>
+    Graph(const std::string& filename);
+
     int numVertices();
     int numEdges();
 
