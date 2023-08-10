@@ -5,18 +5,52 @@
 #include <limits>
 #include <string>
 #include <iostream>
+#include <fstream>
 
 using namespace std;
 
-Graph::Graph(int num_vertices) {
-    if (num_vertices <= 0) {
-        throw(invalid_argument("Error in constructor Graph(int): the number of "
-            "vertices " + to_string(num_vertices) + " is invalid!"));
+Graph::Graph(const std::string& filename) {
+    std::ifstream file(filename);
+    if (!file.is_open()) {
+        throw std::runtime_error("Error opening file: " + filename);
     }
+
+    std::string line;
+    int num_vertices, num_edges;
+
+    // Read the first line to get the number of vertices and edges
+    getline(file, line);
+    if (line.substr(0, 2) != "p ") {
+        throw std::invalid_argument("Invalid file format: " + filename);
+    }
+    if (sscanf(line.c_str(), "p edge %d %d", &num_vertices, &num_edges) != 2) {
+        throw std::invalid_argument("Invalid file format: " + filename);
+    }
+
+    if (num_vertices <= 0 || num_edges < 0) {
+        throw std::invalid_argument("Invalid graph data in file: " + filename);
+    }
+
     num_vertices_ = num_vertices;
     num_edges_ = 0;
 
     adjacency_lists_.resize(num_vertices);
+
+    // Read and insert edges
+    for (int i = 0; i < num_edges; ++i) {
+        getline(file, line);
+        if (line.substr(0, 2) != "e ") {
+            throw std::invalid_argument("Invalid file format: " + filename);
+        }
+        int v1, v2;
+        if (sscanf(line.c_str(), "e %d %d", &v1, &v2) != 2) {
+            throw std::invalid_argument("Invalid file format: " + filename);
+        }
+        Edge edge(v1 - 1, v2 - 1);
+        insertEdge(edge);
+    }
+
+    file.close();
 }
 
 int Graph::numVertices() {
