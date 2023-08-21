@@ -15,11 +15,16 @@ void print_exception(const exception &e, int level = 0) {
     }
 }
 
-int main (int argc, char* argv[]) {
+int main(int argc, char* argv[]) {
+    if (argc != 2) {
+        std::cerr << "Usage: " << argv[0] << " input_filename" << std::endl;
+        return 1;
+    }
+
     try {
-        Graph g("graph.txt");
+        Graph g(argv[1]);
         g.print();
-    } catch (const exception& e) {
+    } catch (const std::exception& e) {
         print_exception(e);
     }
     return 0;
