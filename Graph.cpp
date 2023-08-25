@@ -53,6 +53,53 @@ Graph::Graph(const std::string& filename) {
     file.close();
 }
 
+vector<vector<int>> Graph::generateDominatingSets(int k) {
+    vector<vector<int>> dominating_sets;
+    vector<int> dcurrent_set;
+
+    generateDominatingSetsRecursive(0, k, dcurrent_set, dominating_sets);
+
+    return dominating_sets;
+}
+
+bool Graph::isDominatingSet(vector<int> set) {
+    vector<bool> is_dominated(num_vertices_, false);
+    for (auto v : set) {
+        is_dominated[v] = true;
+        for (auto u : adjacency_lists_[v]) {
+            is_dominated[u] = true;
+        }
+    }
+
+    for (auto v : set) {
+        for (auto u : adjacency_lists_[v]) {
+            is_dominated[u] = true;
+        }
+    }
+
+    for (auto v = 0; v < num_vertices_; v++) {
+        if (!is_dominated[v]) {
+            return false;
+        }
+    }
+    return true;
+}
+
+void Graph::generateDominatingSetsRecursive(int current_vertex, int k, vector<int>& current_set, vector<vector<int>>& dominating_sets) {
+    if (current_set.size() == k) {
+        if(isDominatingSet(current_set)) {
+            dominating_sets.push_back(current_set);
+        }
+        return;
+    }
+
+    for (int v = current_vertex; v < num_vertices_; v++) {
+        current_set.push_back(v);
+        generateDominatingSetsRecursive(v + 1, k, current_set, dominating_sets);
+        current_set.pop_back();
+    }
+}
+
 int Graph::numVertices() {
     return num_vertices_;
 }
