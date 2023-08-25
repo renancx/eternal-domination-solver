@@ -23,7 +23,18 @@ int main(int argc, char* argv[]) {
 
     try {
         Graph g(argv[1]);
-        g.print();
+
+        int k = 3; // dominating set size
+        vector<vector<int>> dominating_configs = g.generateDominatingSets(k);
+
+        cout << "Dominating Sets of size " << k << ":\n";
+        for (const vector<int>& config : dominating_configs) {
+            for (int v : config) {
+                cout << v + 1 << " "; 
+            }
+            cout << "\n";
+        }
+
     } catch (const std::exception& e) {
         print_exception(e);
     }
