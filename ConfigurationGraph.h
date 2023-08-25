@@ -26,6 +26,9 @@ private:
     int num_edges_;
     std::vector<std::list<int>> adjacency_lists_;  
     
+    int original_num_vertices_;
+    std::vector<std::vector<int>> configurations_;
+
     void validateVertex(int v);
     void validateEdge(Edge e);
 };
