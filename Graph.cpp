@@ -54,25 +54,19 @@ Graph::Graph(const std::string& filename) {
 }
 
 vector<vector<int>> Graph::generateDominatingSets(int k) {
-    vector<vector<int>> dominating_sets;
-    vector<int> dcurrent_set;
+    vector<vector<int>> dominating_sets; // stores the generated dominating sets
+    vector<int> dcurrent_set; // stores the current dominating set temporarily
 
-    generateDominatingSetsRecursive(0, k, dcurrent_set, dominating_sets);
+    exploreCombinations(0, k, dcurrent_set, dominating_sets);
 
-    return dominating_sets;
+    return dominating_sets; // return all the generated dominating sets
 }
 
 bool Graph::isDominatingSet(vector<int> set) {
-    vector<bool> is_dominated(num_vertices_, false);
-    for (auto v : set) {
+    vector<bool> is_dominated(num_vertices_, false); // all vertices are initially not dominated (false)
+    for (auto v : set) {  // all vertices in the dominating set are dominated (true)
         is_dominated[v] = true;
-        for (auto u : adjacency_lists_[v]) {
-            is_dominated[u] = true;
-        }
-    }
-
-    for (auto v : set) {
-        for (auto u : adjacency_lists_[v]) {
+        for (auto u : adjacency_lists_[v]) { // all vertices adjacent to a vertex in the dominating set are dominated (true)
             is_dominated[u] = true;
         }
     }
@@ -85,7 +79,8 @@ bool Graph::isDominatingSet(vector<int> set) {
     return true;
 }
 
-void Graph::generateDominatingSetsRecursive(int current_vertex, int k, vector<int>& current_set, vector<vector<int>>& dominating_sets) {
+// generate all the dominating sets of size k recursively
+void Graph::exploreCombinations(int current_vertex, int k, vector<int>& current_set, vector<vector<int>>& dominating_sets) {
     if (current_set.size() == k) {
         if(isDominatingSet(current_set)) {
             dominating_sets.push_back(current_set);
@@ -95,7 +90,7 @@ void Graph::generateDominatingSetsRecursive(int current_vertex, int k, vector<in
 
     for (int v = current_vertex; v < num_vertices_; v++) {
         current_set.push_back(v);
-        generateDominatingSetsRecursive(v + 1, k, current_set, dominating_sets);
+        exploreCombinations(v + 1, k, current_set, dominating_sets);
         current_set.pop_back();
     }
 }
