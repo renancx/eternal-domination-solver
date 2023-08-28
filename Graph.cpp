@@ -71,7 +71,7 @@ bool Graph::isDominatingSet(vector<int> set) {
         }
     }
 
-    for (auto v = 0; v < num_vertices_; v++) {
+    for (auto v = 0; v < num_vertices_; v++) { // if there is a vertex that is not dominated, the set is not a dominating set
         if (!is_dominated[v]) {
             return false;
         }
