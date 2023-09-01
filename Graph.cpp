@@ -59,10 +59,11 @@ vector<vector<int>> Graph::generateDominatingSets(int k) {
 
     exploreCombinations(0, k, dcurrent_set, dominating_sets);
 
-    return dominating_sets; // return all the generated dominating sets
+    // avoid unnecessary copies
+    return std::move(dominating_sets); // return all the generated dominating sets
 }
 
-bool Graph::isDominatingSet(vector<int> set) {
+bool Graph::isDominatingSet(vector<int>& set) {
     vector<bool> is_dominated(num_vertices_, false); // all vertices are initially not dominated (false)
     for (auto v : set) {  // all vertices in the dominating set are dominated (true)
         is_dominated[v] = true;

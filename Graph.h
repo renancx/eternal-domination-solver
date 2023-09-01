@@ -12,7 +12,7 @@ public:
     //p edge <number of vertices> <number of edges>
     Graph(const std::string& filename);
 
-    bool isDominatingSet(std::vector<int> set);
+    bool isDominatingSet(std::vector<int>& set);
 
     std::vector<std::vector<int>> generateDominatingSets(int k);
 
