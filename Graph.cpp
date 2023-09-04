@@ -171,9 +171,9 @@ void Graph::removeEdge(Edge e) {
 
 void Graph::print() {
     for (auto v = 0; v < num_vertices_; v++) {
-        cout << v  + 1 << ":"; // vertices are numbered from 1 to n in the file format
+        cout << v + 1 << ":"; // vertices are numbered from 1 to n in the file format
         for (auto u : adjacency_lists_[v]) {
-            cout << " " << u;
+            cout << " " << u + 1;
         }
         cout << "\n";
     }
