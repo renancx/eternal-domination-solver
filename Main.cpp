@@ -39,6 +39,20 @@ int main(int argc, char* argv[]) {
             cout << "\n";
         }
 
+        for (int i = 0; i < (((int) dominating_configs.size()) - 1); i++) {
+            for (int j = (i + 1); j < ((int) dominating_configs.size()); j++) {
+                cout << "Is there a guard transition between dominating sets" << endl;
+                for (auto &v : dominating_configs[i]) {
+                    cout << " " << (v + 1);
+                }
+                cout << " and";
+                for (auto &v : dominating_configs[j]) {
+                    cout << " " << (v + 1);
+                }
+                cout << "?" << endl;
+                cout << (g.isGuardTransition(dominating_configs[i], dominating_configs[j], true) ? "Yes" : "No") << endl;
+            }
+        }
     } catch (const std::exception& e) {
         print_exception(e);
     }

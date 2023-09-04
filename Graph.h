@@ -8,6 +8,9 @@
 
 class Graph {
 public:
+    //build a graph that has the number of vertices received as a parameter and no edges
+    Graph(int num_vertices);
+
     //build a graph from a file that has the following format:
     //p edge <number of vertices> <number of edges>
     Graph(const std::string& filename);
@@ -17,6 +20,8 @@ public:
     std::vector<std::vector<int>> generateDominatingSets(int k);
 
     void exploreCombinations(int current_vertex ,int k, std::vector<int>& current_set, std::vector<std::vector<int>>& dominating_sets);
+
+    bool isGuardTransition(std::vector<int> &dominating_set_1, std::vector<int> &dominating_set_2, bool print_transition);
 
     int numVertices();
     int numEdges();

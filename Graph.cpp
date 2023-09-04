@@ -1,4 +1,5 @@
 #include "Graph.h"
+#include "BipartiteGraph.h"
 #include <exception>
 #include <stdexcept>
 #include <algorithm>
@@ -8,6 +9,17 @@
 #include <fstream>
 
 using namespace std;
+
+Graph::Graph(int num_vertices) {
+    if (num_vertices < 0) {
+        throw std::invalid_argument("Invalid number of vertices: " + to_string(num_vertices));
+    }
+
+    num_vertices_ = num_vertices;
+    num_edges_ = 0;
+
+    adjacency_lists_.resize(num_vertices_);
+}
 
 Graph::Graph(const std::string& filename) {
     std::ifstream file(filename);
@@ -94,6 +106,59 @@ void Graph::exploreCombinations(int current_vertex, int k, vector<int>& current_
         exploreCombinations(v + 1, k, current_set, dominating_sets);
         current_set.pop_back();
     }
+}
+
+bool Graph::isGuardTransition(vector<int> &dominating_set_1, vector<int> &dominating_set_2, bool print_transition) {
+    if (dominating_set_1.size() != dominating_set_2.size()) {
+        return false;
+    }
+
+    int dominating_set_size = ((int) dominating_set_1.size());
+
+    vector<int> order_in_dominating_set_2(num_vertices_, -1);
+    int order = -1;
+    for (auto &v : dominating_set_2) {
+        order++;
+        order_in_dominating_set_2[v] = order;
+    }
+
+    list<Edge> edges;
+    for (int v = 0; v < ((int) dominating_set_1.size()); v++) {
+        for (auto &u : adjacency_lists_[dominating_set_1[v]]) {
+            if (order_in_dominating_set_2[u] >= 0) {
+                edges.push_back(Edge(v, (dominating_set_size + order_in_dominating_set_2[u])));
+            }
+        }
+        if (order_in_dominating_set_2[v] >= 0) {
+            edges.push_back(Edge(v, (dominating_set_size + order_in_dominating_set_2[v])));
+        }
+    }
+
+    BipartiteGraph bipartite_graph(dominating_set_size, dominating_set_size, edges);
+
+    // TODO Remove
+    // bipartite_graph.print();
+
+    vector<int> match(2 * dominating_set_size);
+    int max_matching_size = bipartite_graph.maxMatching(match);
+
+    if (max_matching_size == dominating_set_size) {
+        if (print_transition) {
+            cout << "Guard transition:" << endl;
+            for (int v = dominating_set_size; v < (2 * dominating_set_size); v++) {
+                if (match[v] >= 0) {
+                    cout << "Guard on " << (dominating_set_1[match[v]] + 1) <<
+                        " moves to " <<
+                        (dominating_set_2[v - dominating_set_size] + 1) <<
+                        endl;
+                }
+            }
+        }
+
+        return true;
+    }
+
+    return false;
 }
 
 int Graph::numVertices() {
