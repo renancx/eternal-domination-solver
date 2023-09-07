@@ -8,7 +8,7 @@
 
 class BipartiteGraph {
 public:
-    BipartiteGraph(int num_vertices_1, int num_vertices_2, std::list<Edge> &edges);
+    BipartiteGraph(int num_vertices_set_1, int num_vertices_set_2, std::list<Edge> &edges);
 
     int numVerticesSet1();
     int numVerticesSet2();
