@@ -9,14 +9,13 @@
 
 using namespace std;
 
-ConfigurationGraph::ConfigurationGraph(int num_vertices) {
+ConfigurationGraph::ConfigurationGraph(int num_vertices, int original_num_vertices, vector<vector<int>> &configurations) 
+    : num_vertices_(num_vertices), original_num_vertices_(original_num_vertices), configurations_(configurations) {
     if (num_vertices < 0) {
         throw invalid_argument("Invalid number of vertices: " + to_string(num_vertices));
     }
 
-    num_vertices_ = num_vertices;
     num_edges_ = 0;
-
     adjacency_lists_.resize(num_vertices_);
 }
 

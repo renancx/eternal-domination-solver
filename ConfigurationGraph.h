@@ -8,7 +8,7 @@
 
 class ConfigurationGraph {
 public:
-    ConfigurationGraph(int num_vertices);
+    ConfigurationGraph(int num_vertices, int original_num_vertices, std::vector<std::vector<int>> &configurations);
 
     int numVertices();
     int numEdges();
