@@ -1,5 +1,6 @@
 #include "Edge.h"
 #include "Graph.h"
+#include "ConfigurationGraph.h"
 #include <exception>
 #include <string>
 #include <iostream>
@@ -28,7 +29,7 @@ int main(int argc, char* argv[]) {
     try {
         Graph g(argv[1]);
 
-        int k = 3; // dominating set size
+        int k = 2; // dominating set size
         vector<vector<int>> dominating_configs = g.generateDominatingSets(k);
 
         cout << "Dominating Sets of size " << k << ":\n";
@@ -36,9 +37,14 @@ int main(int argc, char* argv[]) {
             for (int v : config) {
                 cout << v + 1 << " "; 
             }
-            cout << "\n";
+            cout << endl;
         }
 
+        cout << "\n\n==Configuration Graph Test==" << endl;
+        ConfigurationGraph cg = g.generateConfigurationGraph(k);
+        cg.print();
+
+        cout << "\n\n==Guard Transition Test==\n";
         for (int i = 0; i < (((int) dominating_configs.size()) - 1); i++) {
             for (int j = (i + 1); j < ((int) dominating_configs.size()); j++) {
                 cout << "Is there a guard transition between dominating sets" << endl;

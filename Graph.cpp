@@ -1,5 +1,6 @@
 #include "Graph.h"
 #include "BipartiteGraph.h"
+#include "ConfigurationGraph.h"
 #include <exception>
 #include <stdexcept>
 #include <algorithm>
@@ -129,7 +130,7 @@ bool Graph::isGuardTransition(vector<int> &dominating_set_1, vector<int> &domina
                 edges.push_back(Edge(v, (dominating_set_size + order_in_dominating_set_2[u])));
             }
         }
-        if (order_in_dominating_set_2[dominating_set_1[v]] >= 0) {
+        if (order_in_dominating_set_2[v] >= 0) {
             edges.push_back(Edge(v, (dominating_set_size + order_in_dominating_set_2[v])));
         }
     }
@@ -159,6 +160,22 @@ bool Graph::isGuardTransition(vector<int> &dominating_set_1, vector<int> &domina
     }
 
     return false;
+}
+
+ConfigurationGraph Graph::generateConfigurationGraph(int k) {
+    vector<vector<int>> dominating_configs = generateDominatingSets(k);
+    ConfigurationGraph configuration_graph(dominating_configs.size(), num_vertices_, dominating_configs);
+
+    // iterating over all pairs of dominating sets
+    for (int i = 0; i < dominating_configs.size(); i++) {
+        for (int j = i + 1; j < dominating_configs.size(); j++) {
+            // verify if there is a guard transition between the dominating sets
+            if (isGuardTransition(dominating_configs[i], dominating_configs[j], false)) {
+                configuration_graph.insertEdge(Edge(i, j));
+            }
+        }
+    }
+    return std::move(configuration_graph);
 }
 
 int Graph::numVertices() {

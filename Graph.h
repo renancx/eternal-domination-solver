@@ -3,6 +3,7 @@
 #define GRAPH_H
 
 #include "Edge.h"
+#include "ConfigurationGraph.h"
 #include <vector>
 #include <list>
 
@@ -22,6 +23,8 @@ public:
     void exploreCombinations(int current_vertex ,int k, std::vector<int>& current_set, std::vector<std::vector<int>>& dominating_sets);
 
     bool isGuardTransition(std::vector<int> &dominating_set_1, std::vector<int> &dominating_set_2, bool print_transition);
+
+    ConfigurationGraph generateConfigurationGraph(int k);
 
     int numVertices();
     int numEdges();

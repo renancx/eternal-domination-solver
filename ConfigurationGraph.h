@@ -2,7 +2,6 @@
 #define CONFIGURATIONGRAPH_H
 
 #include "Edge.h"
-#include "Graph.h"
 #include <vector>
 #include <list>
 
