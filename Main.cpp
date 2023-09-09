@@ -29,22 +29,25 @@ int main(int argc, char* argv[]) {
     try {
         Graph g(argv[1]);
 
-        int k = 2; // dominating set size
+        int k = 3; // dominating set size
         vector<vector<int>> dominating_configs = g.generateDominatingSets(k);
 
-        cout << "Dominating Sets of size " << k << ":\n";
+        cout << "-- Dominating Sets of size " << k << ":\n";
+        int setNumber = 1;
         for (const vector<int>& config : dominating_configs) {
+            cout << "Set " << setNumber++ << ": ";
             for (int v : config) {
-                cout << v + 1 << " "; 
+                cout << v + 1 << " ";
             }
             cout << endl;
         }
 
-        cout << "\n\n==Configuration Graph Test==" << endl;
+
+        cout << "\n-- Configuration Graph:" << endl;
         ConfigurationGraph cg = g.generateConfigurationGraph(k);
         cg.print();
 
-        cout << "\n\n==Guard Transition Test==\n";
+        cout << "\n-- Guard Transitions:" << endl;
         for (int i = 0; i < (((int) dominating_configs.size()) - 1); i++) {
             for (int j = (i + 1); j < ((int) dominating_configs.size()); j++) {
                 cout << "Is there a guard transition between dominating sets" << endl;
@@ -66,7 +69,7 @@ int main(int argc, char* argv[]) {
     auto end_time = std::chrono::high_resolution_clock::now();
     auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time).count();
 
-    cout << "Running time: " << duration << " ms\n";
+    cout << "Running time: " << duration << " ms" << endl;
 
     return 0;
 }
