@@ -95,7 +95,7 @@ bool Graph::isDominatingSet(vector<int>& set) {
 
 // generate all the dominating sets of size k recursively
 void Graph::exploreCombinations(int current_vertex, int k, vector<int>& current_set, vector<vector<int>>& dominating_sets) {
-    if (current_set.size() == k) {
+    if (((int) current_set.size()) == k) {
         if(isDominatingSet(current_set)) {
             dominating_sets.push_back(current_set);
         }
@@ -167,8 +167,8 @@ ConfigurationGraph Graph::generateConfigurationGraph(int k) {
     ConfigurationGraph configuration_graph(dominating_configs.size(), num_vertices_, dominating_configs);
 
     // iterating over all pairs of dominating sets
-    for (int i = 0; i < dominating_configs.size(); i++) {
-        for (int j = i + 1; j < dominating_configs.size(); j++) {
+    for (int i = 0; i < ((int) dominating_configs.size()); i++) {
+        for (int j = i + 1; j < ((int) dominating_configs.size()); j++) {
             // verify if there is a guard transition between the dominating sets
             if (isGuardTransition(dominating_configs[i], dominating_configs[j], false)) {
                 configuration_graph.insertEdge(Edge(i, j));
