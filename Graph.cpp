@@ -130,8 +130,8 @@ bool Graph::isGuardTransition(vector<int> &dominating_set_1, vector<int> &domina
                 edges.push_back(Edge(v, (dominating_set_size + order_in_dominating_set_2[u])));
             }
         }
-        if (order_in_dominating_set_2[v] >= 0) {
-            edges.push_back(Edge(v, (dominating_set_size + order_in_dominating_set_2[v])));
+        if (order_in_dominating_set_2[dominating_set_1[v]] >= 0) {
+            edges.push_back(Edge(v, (dominating_set_size + order_in_dominating_set_2[dominating_set_1[v]])));
         }
     }
 
