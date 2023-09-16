@@ -20,7 +20,7 @@ ConfigurationGraph::ConfigurationGraph(int num_vertices, int original_num_vertic
 }
 
 vector<bool> ConfigurationGraph::findSafeDominatingSets(const vector<vector<int>>& dominating_sets) {
-    vector<bool> is_secure(dominating_sets.size(), true); // Inicialmente, todos são considerados seguros
+    vector<bool> is_secure(dominating_sets.size(), true);
 
     bool changed = true;
 
@@ -34,7 +34,6 @@ vector<bool> ConfigurationGraph::findSafeDominatingSets(const vector<vector<int>
 
             vector<bool> can_defend(num_vertices_, false);
 
-            // Marcar os vértices que o conjunto dominante i pode defender
             for (int vertex : dominating_sets[i]) {
                 can_defend[vertex] = true;
             }
@@ -45,14 +44,13 @@ vector<bool> ConfigurationGraph::findSafeDominatingSets(const vector<vector<int>
                 }
 
                 if (hasEdge(Edge(i, j))) {
-                    // Verificar se o conjunto dominante j pode ser defendido
                     bool can_be_defended = all_of(dominating_sets[j].begin(), dominating_sets[j].end(),
                         [&](int vertex) { return can_defend[vertex]; });
 
                     if (!can_be_defended) {
                         is_secure[j] = false;
                         changed = true;
-                        break; // Não precisa verificar outros conjuntos se este não pode ser defendido
+                        break;
                     }
                 }
             }
