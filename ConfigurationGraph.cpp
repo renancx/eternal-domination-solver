@@ -19,6 +19,65 @@ ConfigurationGraph::ConfigurationGraph(int num_vertices, int original_num_vertic
     adjacency_lists_.resize(num_vertices_);
 }
 
+vector<bool> ConfigurationGraph::findSafeDominatingSets(const vector<vector<int>>& dominating_sets) {
+    vector<bool> is_secure(dominating_sets.size(), true); // Inicialmente, todos são considerados seguros
+
+    bool changed = true;
+
+    while (changed) {
+        changed = false;
+
+        for (size_t i = 0; i < dominating_sets.size(); i++) {
+            if (!is_secure[i]) {
+                continue;
+            }
+
+            vector<bool> can_defend(num_vertices_, false);
+
+            // Marcar os vértices que o conjunto dominante i pode defender
+            for (int vertex : dominating_sets[i]) {
+                can_defend[vertex] = true;
+            }
+
+            for (size_t j = 0; j < dominating_sets.size(); j++) {
+                if (i == j || !is_secure[j]) {
+                    continue;
+                }
+
+                if (hasEdge(Edge(i, j))) {
+                    // Verificar se o conjunto dominante j pode ser defendido
+                    bool can_be_defended = all_of(dominating_sets[j].begin(), dominating_sets[j].end(),
+                        [&](int vertex) { return can_defend[vertex]; });
+
+                    if (!can_be_defended) {
+                        is_secure[j] = false;
+                        changed = true;
+                        break; // Não precisa verificar outros conjuntos se este não pode ser defendido
+                    }
+                }
+            }
+        }
+    }
+
+    return is_secure;
+}
+
+//------------------------------------------------------------------------------
+
+void ConfigurationGraph::printSafeDominatingSets(const vector<vector<int>> &dominating_sets, const vector<bool> &is_safe) {
+    cout << "Safe Dominating Sets of size " << dominating_sets[0].size() << ":\n";
+
+    for (size_t i = 0; i < dominating_sets.size(); i++) {
+        if (is_safe[i]) {
+            cout << "Set " << (i + 1) << ": ";
+            for (int vertex : dominating_sets[i]) {
+                cout << vertex + 1 << " "; // +1 para indexar de 1 a n
+            }
+            cout << endl;
+        }
+    }
+}
+
 int ConfigurationGraph::numVertices() {
     return num_vertices_;
 }
