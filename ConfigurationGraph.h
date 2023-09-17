@@ -23,6 +23,12 @@ public:
     void removeEdge(Edge e);
 
     void print();
+
+    void markCurrentVertices(const std::vector<int> &dominating_set, std::vector<bool> &current_vertices_);
+
+    void markDefendedVertices(const std::vector<int> &dominating_set, std::vector<bool> &defended_vertices_);
+
+    bool canDefendAllVertices(const std::vector<int> &dominating_set1, const std::vector<int> &dominating_set2, std::vector<bool> &defended_vertices_);
 private:
     int num_vertices_;
     int num_edges_;

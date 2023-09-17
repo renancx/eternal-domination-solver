@@ -20,44 +20,63 @@ ConfigurationGraph::ConfigurationGraph(int num_vertices, int original_num_vertic
 }
 
 vector<bool> ConfigurationGraph::findSafeDominatingSets(const vector<vector<int>>& dominating_sets) {
-    vector<bool> is_secure(dominating_sets.size(), true);
+    int numSets = dominating_sets.size();
 
-    bool changed = true;
+    vector<bool> defended_vertices(num_vertices_, false);
 
-    while (changed) {
-        changed = false;
+    vector<bool> current_dominating_vertices(num_vertices_, false);
 
-        for (size_t i = 0; i < dominating_sets.size(); i++) {
-            if (!is_secure[i]) {
-                continue;
-            }
+    vector<bool> is_safe(numSets, true);
 
-            vector<bool> can_defend(num_vertices_, false);
+    bool has_safe_set = true;
 
-            for (int vertex : dominating_sets[i]) {
-                can_defend[vertex] = true;
-            }
+    while (has_safe_set){
+        has_safe_set = false;
 
-            for (size_t j = 0; j < dominating_sets.size(); j++) {
-                if (i == j || !is_secure[j]) {
-                    continue;
-                }
+        for (int i = 0; i < numSets; i++){
+            //verify only safe sets
+            if(is_safe[i]){
+                markDefendedVertices(dominating_sets[i], defended_vertices);
+                markCurrentVertices(dominating_sets[i], current_dominating_vertices);
 
-                if (hasEdge(Edge(i, j))) {
-                    bool can_be_defended = all_of(dominating_sets[j].begin(), dominating_sets[j].end(),
-                        [&](int vertex) { return can_defend[vertex]; });
+                for (int j = 0; j < numSets; j++){
+                    if (i != j && is_safe[j]) {
+                        markCurrentVertices(dominating_sets[j], current_dominating_vertices);
 
-                    if (!can_be_defended) {
-                        is_secure[j] = false;
-                        changed = true;
-                        break;
+                        if (!canDefendAllVertices(dominating_sets[i], dominating_sets[j], defended_vertices)) {
+                            is_safe[j] = false;
+                            has_safe_set = true;
+                            break;
+                        }
                     }
-                }
+             }
             }
         }
     }
+    return is_safe;
+}
 
-    return is_secure;
+//mark current defended vertices
+void ConfigurationGraph::markDefendedVertices(const vector<int> &dominating_set, vector<bool> &defended_vertices_) {
+    for(int v : dominating_set){
+        defended_vertices_[v] = true;
+    }
+}
+
+//mark current dominating vertices
+void ConfigurationGraph::markCurrentVertices(const vector<int> &dominating_set, vector<bool> &current_dominating_vertices_) {
+    for(int v : dominating_set){
+        current_dominating_vertices_[v] = true;
+    }
+}
+
+bool ConfigurationGraph::canDefendAllVertices(const vector<int> &dominating_set1, const vector<int> &dominating_set2, vector<bool> &defended_vertices_) {
+    for (int v : dominating_set2) {
+        if (!defended_vertices_[v]) {
+            return false;
+        }
+    }
+    return true;
 }
 
 //------------------------------------------------------------------------------
