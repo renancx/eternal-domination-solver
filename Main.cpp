@@ -29,7 +29,7 @@ int main(int argc, char* argv[]) {
     try {
         Graph g(argv[1]);
 
-        int k = 3; // dominating set size
+        int k = 4; // dominating set size
         vector<vector<int>> dominating_configs = g.generateDominatingSets(k);
 
         cout << "-- Dominating Sets of size " << k << ":\n";
@@ -42,10 +42,11 @@ int main(int argc, char* argv[]) {
             cout << endl;
         }
 
-
         cout << "\n-- Configuration Graph:" << endl;
         ConfigurationGraph cg = g.generateConfigurationGraph(k);
         cg.print();
+
+        /*
 
         cout << "\n-- Guard Transitions:" << endl;
         for (int i = 0; i < (((int) dominating_configs.size()) - 1); i++) {
@@ -62,6 +63,13 @@ int main(int argc, char* argv[]) {
                 cout << (g.isGuardTransition(dominating_configs[i], dominating_configs[j], true) ? "Yes" : "No") << endl;
             }
         }
+
+        */
+
+        cout << "\n-- Safe Dominating Sets:" << endl;
+        vector<bool> is_safe = cg.findSafeDominatingSets(dominating_configs);
+        cg.printSafeDominatingSets(dominating_configs, is_safe);
+
     } catch (const std::exception& e) {
         print_exception(e);
     }
