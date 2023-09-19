@@ -66,7 +66,6 @@ int main(int argc, char* argv[]) {
 
         */
 
-        cout << "\n-- Safe Dominating Sets:" << endl;
         vector<bool> is_safe = cg.findSafeDominatingSets(dominating_configs);
         cg.printSafeDominatingSets(dominating_configs, is_safe);
 

@@ -21,57 +21,55 @@ ConfigurationGraph::ConfigurationGraph(int num_vertices, int original_num_vertic
 
 //function will recieve the dominating sets of size k
 vector<bool> ConfigurationGraph::findSafeDominatingSets(const vector<vector<int>>& dominating_sets) {
-    
-    //vector of bools to check if a dominating set is safe
-    //initially all sets are safe
+    //vector to store the safe dominating sets
     vector<bool> is_safe(dominating_sets.size(), true);
 
-    //for each dominating set
+    //vector to store the vertices of the ORIGINAL graph for each dominating set
+    vector<vector<bool>> original_vertices(dominating_sets.size(), vector<bool>(original_num_vertices_, false));
+
     bool any_changes = true;
 
-    //while the number of safe dominating sets is > 0
+    //while the number of safe dominating sets is greater than 0
     while(any_changes){
         any_changes = false;
 
-        //for each dominating set
         for(size_t i = 0; i < dominating_sets.size(); i++){
             //verify if the dominating set is safe
             if(is_safe[i]){
+                
+                //in the original graph, mark the vertices of the dominating set as true
+                for(int vertex : dominating_sets[i]){
+                    //for each dominating set, create a vector of bools to store the vertices of the original graph
+                    original_vertices[i][vertex] = true;
 
-                //vector of bools to check if a vertex is defended
-                //initially all vertices are not defended
-                vector<bool> defended_vertices_(num_vertices_, false);
-
-                //all vertices from dominating_set[i] are defended
-                for(int v : dominating_sets[i]){
-                    defended_vertices_[v] = true;
-                    //cout << v + 1 << " "; THIS SEEMS TO BE WORKING
+                    //------------cout << "\n\n" << endl;
+                    //------------cout << "Vertex " << vertex + 1 << " is safe" << endl;
                 }
 
-                for(size_t j = 0; j < dominating_sets.size(); j++){
-                    //if the dominating set is safe and is not the same as the dominating set we are checking
-                    if (i != j && is_safe[j]) {
-                        //for each vertex in dominating_set[j]
-                        for (int v : dominating_sets[j]) {
-                            //if the vertex is not defended
-                            defended_vertices_[v] = true;
-                            //cout << v + 1 << " ";
+                for(int neighbor_set : adjacency_lists_[i]){
+                    if (is_safe[neighbor_set]) {
+                        //----------cout << "\nNeighbor set " << neighbor_set + 1 << " is safe" << endl;
+                        // Iterate over the vertices in the neighbor_set and mark the corresponding vertices in the original graph as true
+                        for(int vertex : dominating_sets[neighbor_set]){
+                            original_vertices[i][vertex] = true;
+                            //-----------cout << "VertexXX " << vertex + 1 << " is safe" << endl;
                         }
                     }
+                    // this is just printing the original vertices
+                    //------------cout << "\nOriginal vertices: ";
+                    //------------for (int j = 0; j < original_vertices[i].size(); j++) {
+                    //------------    cout << original_vertices[i][j] << " ";
+                    //------------}
                 }
 
-                //check if all configurations are defended
-                bool all_configurations_are_defended = true;
-                for (bool covered : defended_vertices_) {
-                    if (!covered) {
-                        all_configurations_are_defended = false;
+                // now i need to check if the dominating set is safe
+                // if any of the vertices in the original graph is false, then the dominating set is not safe
+                for (int j = 0; j < original_vertices[i].size(); j++) {
+                    if (!original_vertices[i][j]) {
+                        is_safe[i] = false;
+                        any_changes = true;
                         break;
                     }
-                }
-
-                if(!all_configurations_are_defended){
-                    is_safe[i] = false;
-                    any_changes = true;
                 }
             }
         }
@@ -82,7 +80,7 @@ vector<bool> ConfigurationGraph::findSafeDominatingSets(const vector<vector<int>
 //------------------------------------------------------------------------------
 
 void ConfigurationGraph::printSafeDominatingSets(const vector<vector<int>> &dominating_sets, const vector<bool> &is_safe) {
-    cout << "Safe Dominating Sets of size " << dominating_sets[0].size() << ":\n";
+    cout << "\n-- Safe Dominating Sets of size " << dominating_sets[0].size() << ":\n";
 
     for (size_t i = 0; i < dominating_sets.size(); i++) {
         if (is_safe[i]) {
