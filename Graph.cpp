@@ -178,6 +178,39 @@ ConfigurationGraph Graph::generateConfigurationGraph(int k) {
     return std::move(configuration_graph);
 }
 
+void Graph::findMinimumGuardSet(){
+    int max_k = num_vertices_; // the maximum size of a dominating set is the number of vertices in the graph
+    vector<vector<int>> dominating_sets; // stores the generated dominating sets
+
+
+    // iterating over all possible sizes of dominating sets
+    for (int k = 1; k <= max_k; k++) {
+        dominating_sets = generateDominatingSets(k);
+
+        //generate the configuration graph of the dominating sets of size k
+        ConfigurationGraph configuration_graph = generateConfigurationGraph(k);
+
+        // generate the safe dominating sets of the configuration graph
+        vector<bool> safe_dominating_sets = configuration_graph.findSafeDominatingSets(dominating_sets);
+
+        // if there is a safe dominating set, then it is the minimum guard set
+        if (any_of(safe_dominating_sets.begin(), safe_dominating_sets.end(), [](bool b) { return b; })) {
+            cout << "\n-- Minimum guard set size: " << k << endl;
+            cout << "\n-- Safe dominating sets of size " << k << ":" << endl;
+            for (int i = 0; i < ((int) safe_dominating_sets.size()); i++) {
+                if (safe_dominating_sets[i]) {
+                    cout << i + 1 << ": ";
+                    for (auto v : dominating_sets[i]) {
+                        cout << v + 1 << " ";
+                    }
+                    cout << endl;
+                }
+            }
+            return;
+        }
+    }
+}
+
 int Graph::numVertices() {
     return num_vertices_;
 }

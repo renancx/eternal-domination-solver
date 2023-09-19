@@ -26,6 +26,8 @@ public:
 
     ConfigurationGraph generateConfigurationGraph(int k);
 
+    void findMinimumGuardSet();
+
     int numVertices();
     int numEdges();
 
