@@ -49,8 +49,6 @@ int main(int argc, char* argv[]) {
         ConfigurationGraph cg = g.generateConfigurationGraph(k);
         cg.print();
 
-        /*
-
         cout << "\n-- Guard Transitions:" << endl;
         for (int i = 0; i < (((int) dominating_configs.size()) - 1); i++) {
             for (int j = (i + 1); j < ((int) dominating_configs.size()); j++) {

@@ -53,7 +53,7 @@ vector<bool> ConfigurationGraph::findSafeDominatingSets(const vector<vector<int>
 
                 // checking if the dominating set is safe
                 // if any of the vertices in the original graph is false, then the dominating set is not safe
-                for (int j = 0; j < original_vertices[i].size(); j++) {
+                for (size_t j = 0; j < original_vertices[i].size(); j++) {
                     if (!original_vertices[i][j]) {
                         is_safe[i] = false;
                         any_changes = true;
