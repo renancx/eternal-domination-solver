@@ -195,7 +195,6 @@ void Graph::findMinimumGuardSet(){
 
         // if there is a safe dominating set, then it is the minimum guard set
         if (any_of(safe_dominating_sets.begin(), safe_dominating_sets.end(), [](bool b) { return b; })) {
-            cout << "\n-- Minimum guard set size: " << k << endl;
             cout << "\n-- Safe dominating sets of size " << k << ":" << endl;
             for (int i = 0; i < ((int) safe_dominating_sets.size()); i++) {
                 if (safe_dominating_sets[i]) {
@@ -206,6 +205,7 @@ void Graph::findMinimumGuardSet(){
                     cout << endl;
                 }
             }
+            cout << "\n-- Minimum guard set size: " << k << endl;
             return;
         }
     }
