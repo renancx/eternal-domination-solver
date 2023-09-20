@@ -19,7 +19,6 @@ ConfigurationGraph::ConfigurationGraph(int num_vertices, int original_num_vertic
     adjacency_lists_.resize(num_vertices_);
 }
 
-//function will recieve the dominating sets of size k
 vector<bool> ConfigurationGraph::findSafeDominatingSets(const vector<vector<int>>& dominating_sets) {
     //vector to store the safe dominating sets
     vector<bool> is_safe(dominating_sets.size(), true);
@@ -41,28 +40,18 @@ vector<bool> ConfigurationGraph::findSafeDominatingSets(const vector<vector<int>
                 for(int vertex : dominating_sets[i]){
                     //for each dominating set, create a vector of bools to store the vertices of the original graph
                     original_vertices[i][vertex] = true;
-
-                    //------------cout << "\n\n" << endl;
-                    //------------cout << "Vertex " << vertex + 1 << " is safe" << endl;
                 }
 
                 for(int neighbor_set : adjacency_lists_[i]){
                     if (is_safe[neighbor_set]) {
-                        //----------cout << "\nNeighbor set " << neighbor_set + 1 << " is safe" << endl;
                         // Iterate over the vertices in the neighbor_set and mark the corresponding vertices in the original graph as true
                         for(int vertex : dominating_sets[neighbor_set]){
                             original_vertices[i][vertex] = true;
-                            //-----------cout << "VertexXX " << vertex + 1 << " is safe" << endl;
                         }
                     }
-                    // this is just printing the original vertices
-                    //------------cout << "\nOriginal vertices: ";
-                    //------------for (int j = 0; j < original_vertices[i].size(); j++) {
-                    //------------    cout << original_vertices[i][j] << " ";
-                    //------------}
                 }
 
-                // now i need to check if the dominating set is safe
+                // checking if the dominating set is safe
                 // if any of the vertices in the original graph is false, then the dominating set is not safe
                 for (int j = 0; j < original_vertices[i].size(); j++) {
                     if (!original_vertices[i][j]) {
@@ -76,8 +65,6 @@ vector<bool> ConfigurationGraph::findSafeDominatingSets(const vector<vector<int>
     }
     return is_safe;
 }
-
-//------------------------------------------------------------------------------
 
 void ConfigurationGraph::printSafeDominatingSets(const vector<vector<int>> &dominating_sets, const vector<bool> &is_safe) {
     cout << "\n-- Safe Dominating Sets of size " << dominating_sets[0].size() << ":\n";
