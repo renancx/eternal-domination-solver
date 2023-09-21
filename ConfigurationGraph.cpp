@@ -57,6 +57,10 @@ vector<bool> ConfigurationGraph::findSafeDominatingSets(const vector<vector<int>
                     if (!original_vertices[i][j]) {
                         is_safe[i] = false;
                         any_changes = true;
+                        i = 0;
+                        for(size_t k = 0; k < is_safe.size(); k++){
+                            original_vertices[k].assign(original_num_vertices_, false);
+                        }
                         break;
                     }
                 }
