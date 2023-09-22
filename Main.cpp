@@ -31,45 +31,6 @@ int main(int argc, char* argv[]) {
         
         g.findMinimumGuardSet();
 
-        /*
-        int k = 3; // dominating set size
-        vector<vector<int>> dominating_configs = g.generateDominatingSets(k);
-
-        cout << "-- Dominating Sets of size " << k << ":\n";
-        int setNumber = 1;
-        for (const vector<int>& config : dominating_configs) {
-            cout << "Set " << setNumber++ << ": ";
-            for (int v : config) {
-                cout << v + 1 << " ";
-            }
-            cout << endl;
-        }
-
-        cout << "\n-- Configuration Graph:" << endl;
-        ConfigurationGraph cg = g.generateConfigurationGraph(k);
-        cg.print();
-
-        cout << "\n-- Guard Transitions:" << endl;
-        for (int i = 0; i < (((int) dominating_configs.size()) - 1); i++) {
-            for (int j = (i + 1); j < ((int) dominating_configs.size()); j++) {
-                cout << "Is there a guard transition between dominating sets" << endl;
-                for (auto &v : dominating_configs[i]) {
-                    cout << " " << (v + 1);
-                }
-                cout << " and";
-                for (auto &v : dominating_configs[j]) {
-                    cout << " " << (v + 1);
-                }
-                cout << "?" << endl;
-                cout << (g.isGuardTransition(dominating_configs[i], dominating_configs[j], true) ? "Yes" : "No") << endl;
-            }
-        }
-
-        vector<bool> is_safe = cg.findSafeDominatingSets(dominating_configs);
-        cg.printSafeDominatingSets(dominating_configs, is_safe);
-
-        */
-
     } catch (const std::exception& e) {
         print_exception(e);
     }

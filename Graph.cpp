@@ -137,9 +137,6 @@ bool Graph::isGuardTransition(vector<int> &dominating_set_1, vector<int> &domina
 
     BipartiteGraph bipartite_graph(dominating_set_size, dominating_set_size, edges);
 
-    // TODO Remove
-    // bipartite_graph.print();
-
     vector<int> match(2 * dominating_set_size);
     int max_matching_size = bipartite_graph.maxMatching(match);
 
