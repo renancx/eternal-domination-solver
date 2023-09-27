@@ -19,12 +19,12 @@ ConfigurationGraph::ConfigurationGraph(int num_vertices, int original_num_vertic
     adjacency_lists_.resize(num_vertices_);
 }
 
-vector<bool> ConfigurationGraph::findSafeDominatingSets(const vector<vector<int>>& dominating_sets) {
+vector<bool> ConfigurationGraph::findSafeDominatingSets(const vector<vector<int>>& configurations) {
     //vector to store the safe dominating sets
-    vector<bool> is_safe(dominating_sets.size(), true);
+    vector<bool> is_safe(configurations.size(), true);
 
     //vector to store the vertices of the ORIGINAL graph for each dominating set
-    vector<vector<bool>> original_vertices(dominating_sets.size(), vector<bool>(original_num_vertices_, false));
+    vector<vector<bool>> original_vertices(configurations.size(), vector<bool>(original_num_vertices_, false));
 
     bool any_changes = true;
 
@@ -32,12 +32,12 @@ vector<bool> ConfigurationGraph::findSafeDominatingSets(const vector<vector<int>
     while(any_changes){
         any_changes = false;
 
-        for(size_t i = 0; i < dominating_sets.size(); i++){
+        for(size_t i = 0; i < configurations.size(); i++){
             //verify if the dominating set is safe
             if(is_safe[i]){
                 
                 //in the original graph, mark the vertices of the dominating set as true
-                for(int vertex : dominating_sets[i]){
+                for(int vertex : configurations[i]){
                     //for each dominating set, create a vector of bools to store the vertices of the original graph
                     original_vertices[i][vertex] = true;
                 }
@@ -45,7 +45,7 @@ vector<bool> ConfigurationGraph::findSafeDominatingSets(const vector<vector<int>
                 for(int neighbor_set : adjacency_lists_[i]){
                     if (is_safe[neighbor_set]) {
                         // Iterate over the vertices in the neighbor_set and mark the corresponding vertices in the original graph as true
-                        for(int vertex : dominating_sets[neighbor_set]){
+                        for(int vertex : configurations[neighbor_set]){
                             original_vertices[i][vertex] = true;
                         }
                     }
