@@ -159,8 +159,9 @@ bool Graph::isGuardTransition(vector<int> &dominating_set_1, vector<int> &domina
     return false;
 }
 
-ConfigurationGraph Graph::generateConfigurationGraph(int k) {
-    vector<vector<int>> dominating_configs = generateDominatingSets(k);
+ConfigurationGraph Graph::generateConfigurationGraph(int k, const vector<vector<int>>& dominating_sets) {
+    vector<vector<int>> dominating_configs = dominating_sets;
+
     ConfigurationGraph configuration_graph(dominating_configs.size(), num_vertices_, dominating_configs);
 
     // iterating over all pairs of dominating sets
@@ -185,7 +186,7 @@ void Graph::findMinimumGuardSet(){
         dominating_sets = generateDominatingSets(k);
 
         //generate the configuration graph of the dominating sets of size k
-        ConfigurationGraph configuration_graph = generateConfigurationGraph(k);
+        ConfigurationGraph configuration_graph = generateConfigurationGraph(k, dominating_sets);
 
         // generate the safe dominating sets of the configuration graph
         vector<bool> safe_dominating_sets = configuration_graph.findSafeDominatingSets(dominating_sets);

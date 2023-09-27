@@ -24,7 +24,7 @@ public:
 
     bool isGuardTransition(std::vector<int> &dominating_set_1, std::vector<int> &dominating_set_2, bool print_transition);
 
-    ConfigurationGraph generateConfigurationGraph(int k);
+    ConfigurationGraph generateConfigurationGraph(int k, const std::vector<std::vector<int>> &dominating_sets);
 
     void findMinimumGuardSet();
 
