@@ -8,6 +8,7 @@
 #include <string>
 #include <iostream>
 #include <fstream>
+#include <omp.h>
 
 using namespace std;
 
@@ -164,15 +165,27 @@ ConfigurationGraph Graph::generateConfigurationGraph(int k, const vector<vector<
 
     ConfigurationGraph configuration_graph(dominating_configs.size(), num_vertices_, dominating_configs);
 
-    // iterating over all pairs of dominating sets
-    for (int i = 0; i < ((int) dominating_configs.size()); i++) {
-        for (int j = i + 1; j < ((int) dominating_configs.size()); j++) {
-            // verify if there is a guard transition between the dominating sets
-            if (isGuardTransition(dominating_configs[i], dominating_configs[j], false)) {
-                configuration_graph.insertEdge(Edge(i, j));
+    #pragma omp parallel
+    {
+        // get the number of threads and the thread id
+        int num_threads = omp_get_num_threads();
+        int thread_id = omp_get_thread_num();
+
+        // calculate the chunk size and the local start and end
+        int chunk = (dominating_configs.size() + num_threads - 1) / num_threads;
+        int local_start = thread_id * chunk;
+        int local_end = min(local_start + chunk, (int)dominating_configs.size());
+
+        // iterate over the local range of dominating sets
+        for (int i = local_start; i < local_end; i++) {
+            for (int j = i + 1; j < dominating_configs.size(); j++) {
+                if (isGuardTransition(dominating_configs[i], dominating_configs[j], false)) {
+                    configuration_graph.insertEdge(Edge(i, j));
+                }
             }
         }
     }
+
     return std::move(configuration_graph);
 }
 
