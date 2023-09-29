@@ -14,7 +14,7 @@ using namespace std;
 
 Graph::Graph(int num_vertices) {
     if (num_vertices < 0) {
-        throw std::invalid_argument("Invalid number of vertices: " + to_string(num_vertices));
+        throw invalid_argument("Invalid number of vertices: " + to_string(num_vertices));
     }
 
     num_vertices_ = num_vertices;
@@ -23,26 +23,26 @@ Graph::Graph(int num_vertices) {
     adjacency_lists_.resize(num_vertices_);
 }
 
-Graph::Graph(const std::string& filename) {
-    std::ifstream file(filename);
+Graph::Graph(const string& filename) {
+    ifstream file(filename);
     if (!file.is_open()) {
-        throw std::runtime_error("Error opening file: " + filename);
+        throw runtime_error("Error opening file: " + filename);
     }
 
-    std::string line;
+    string line;
     int num_vertices, num_edges;
 
     // Read the first line to get the number of vertices and edges
     getline(file, line);
     if (line.substr(0, 2) != "p ") {
-        throw std::invalid_argument("Invalid file format: " + filename);
+        throw invalid_argument("Invalid file format: " + filename);
     }
     if (sscanf(line.c_str(), "p edge %d %d", &num_vertices, &num_edges) != 2) {
-        throw std::invalid_argument("Invalid file format: " + filename);
+        throw invalid_argument("Invalid file format: " + filename);
     }
 
     if (num_vertices <= 0 || num_edges < 0) {
-        throw std::invalid_argument("Invalid graph data in file: " + filename);
+        throw invalid_argument("Invalid graph data in file: " + filename);
     }
 
     num_vertices_ = num_vertices;
@@ -54,11 +54,11 @@ Graph::Graph(const std::string& filename) {
     for (int i = 0; i < num_edges; ++i) {
         getline(file, line);
         if (line.substr(0, 2) != "e ") {
-            throw std::invalid_argument("Invalid file format: " + filename);
+            throw invalid_argument("Invalid file format: " + filename);
         }
         int v1, v2;
         if (sscanf(line.c_str(), "e %d %d", &v1, &v2) != 2) {
-            throw std::invalid_argument("Invalid file format: " + filename);
+            throw invalid_argument("Invalid file format: " + filename);
         }
         Edge edge(v1 - 1, v2 - 1);
         insertEdge(edge);
@@ -74,7 +74,7 @@ vector<vector<int>> Graph::generateDominatingSets(int k) {
     exploreCombinations(0, k, dcurrent_set, dominating_sets);
 
     // avoid unnecessary copies
-    return std::move(dominating_sets); // return all the generated dominating sets
+    return move(dominating_sets); // return all the generated dominating sets
 }
 
 bool Graph::isDominatingSet(vector<int>& set) {
@@ -178,7 +178,7 @@ ConfigurationGraph Graph::generateConfigurationGraph(int k, const vector<vector<
 
         // iterate over the local range of dominating sets
         for (int i = local_start; i < local_end; i++) {
-            for (int j = i + 1; j < dominating_configs.size(); j++) {
+            for (int j = i + 1; j < (int) dominating_configs.size(); j++) {
                 if (isGuardTransition(dominating_configs[i], dominating_configs[j], false)) {
                     configuration_graph.insertEdge(Edge(i, j));
                 }
@@ -186,7 +186,7 @@ ConfigurationGraph Graph::generateConfigurationGraph(int k, const vector<vector<
         }
     }
 
-    return std::move(configuration_graph);
+    return move(configuration_graph);
 }
 
 void Graph::findMinimumGuardSet(){
