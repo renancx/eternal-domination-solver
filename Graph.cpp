@@ -202,7 +202,7 @@ void Graph::findMinimumGuardSet(){
         ConfigurationGraph configuration_graph = generateConfigurationGraph(k, dominating_sets);
 
         // generate the safe dominating sets of the configuration graph
-        vector<bool> safe_dominating_sets = configuration_graph.findSafeDominatingSets(dominating_sets);
+        vector<bool> safe_dominating_sets = configuration_graph.findSafeDominatingSets();
 
         // if there is a safe dominating set, then it is the minimum guard set
         if (any_of(safe_dominating_sets.begin(), safe_dominating_sets.end(), [](bool b) { return b; })) {

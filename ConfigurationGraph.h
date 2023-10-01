@@ -2,14 +2,14 @@
 #define CONFIGURATIONGRAPH_H
 
 #include "Edge.h"
-#include <vector>
+#include <vector> 
 #include <list>
 
 class ConfigurationGraph {
 public:
     ConfigurationGraph(int num_vertices, int original_num_vertices, std::vector<std::vector<int>> &configurations);
 
-    std::vector<bool> findSafeDominatingSets(const std::vector<std::vector<int>> &dominating_sets);
+    std::vector<bool> findSafeDominatingSets();
 
     void printSafeDominatingSets(const std::vector<std::vector<int>> &dominating_sets, const std::vector<bool> &is_safe);
 
