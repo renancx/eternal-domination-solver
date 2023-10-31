@@ -5,6 +5,8 @@
 #include <string>
 #include <iostream>
 #include <chrono>
+#include <thread>
+#include <atomic>
 
 using namespace std;
 
@@ -17,28 +19,51 @@ void print_exception(const exception &e, int level = 0) {
     }
 }
 
-int main(int argc, char* argv[]) {
+void runGraphProcessing(const string& inputFilename, atomic<bool>& graphFinished) {
+    string instance = inputFilename.substr(inputFilename.find_last_of("/\\") + 1);
+    instance = instance.substr(0, instance.find_last_of("."));
 
-    auto start_time = std::chrono::high_resolution_clock::now();
+    cout << "Instance: " << instance << endl;
+    try {
+        Graph g(inputFilename);
+        g.findMinimumGuardSet();
+        graphFinished = true; //If the graph finish the execution
+    } catch (const std::exception& e) {
+        print_exception(e);
+    }
+}
+
+int main(int argc, char* argv[]) {
 
     if (argc != 2) {
         std::cerr << "Usage: " << argv[0] << " input_filename" << std::endl;
         return 1;
     }
 
-    try {
-        Graph g(argv[1]);
-        
-        g.findMinimumGuardSet();
+    atomic<bool> graphFinished(false);
 
-    } catch (const std::exception& e) {
-        print_exception(e);
+    const int max_time_in_seconds = 7200;
+
+    std::thread processingThread(runGraphProcessing, argv[1], ref(graphFinished));
+
+    auto startTime = chrono::steady_clock::now();
+    while (true) {
+        auto currentTime = chrono::steady_clock::now();
+        auto elapsedMilliseconds = chrono::duration_cast<chrono::milliseconds>(currentTime - startTime);
+
+        if (graphFinished) {
+            cout << "Running time: " << elapsedMilliseconds.count() << " ms" << endl;
+            break;
+        }
+
+        if (elapsedMilliseconds.count() > max_time_in_seconds * 1000) {
+            cout << "Time limit exceeded: " <<  elapsedMilliseconds.count() << " ms" << endl;
+            return 0;
+        }
     }
 
-    auto end_time = std::chrono::high_resolution_clock::now();
-    auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time).count();
-
-    cout << "Running time: " << duration << " ms" << endl;
+    //Wait until the thread process ends
+    processingThread.join();
 
     return 0;
 }
