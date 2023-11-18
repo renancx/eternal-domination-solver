@@ -1,1 +1,7 @@
-
+@software{eternal_dom_solver,
+  author = {Renan Carlos Loewenstein},
+  month = {12},
+  title = {{Eternal Domination Solver}},
+  url = {https://github.com/renancx/eternal-domination-solver},
+  year = {2023}
+}
